@@ -1,0 +1,10 @@
+@extends('layouts.app')
+
+@section('title', $company->name.' | URU Coop-IS')
+@section('breadcrumb', 'สถานประกอบการ')
+
+@section('content')
+<header class="page-heading"><div><p class="page-eyebrow">รายละเอียดสถานประกอบการ</p><h1>{{ $company->name }}</h1><p class="page-subtitle">{{ $company->address ?: 'ไม่ระบุที่อยู่' }}</p></div><div class="d-flex gap-2"><a href="{{ route('officer.companies.index') }}" class="btn btn-outline-secondary">กลับรายการ</a><a href="{{ route('officer.companies.edit', $company) }}" class="btn btn-primary"><i data-lucide="pencil" class="me-1" style="width:15px;height:15px"></i>แก้ไข</a></div></header>
+<div class="record-summary mb-3"><div><span>สถานะ</span><strong><span class="badge {{ $company->status === 'active' ? 'bg-success' : 'bg-warning text-dark' }}">{{ $company->status }}</span></strong></div><div><span>เบอร์โทร</span><strong>{{ $company->phone ?: '—' }}</strong></div><div><span>อีเมล</span><strong>{{ $company->email ?: '—' }}</strong></div><div><span>ผู้ติดต่อ</span><strong>{{ $company->contact_person ?: '—' }}</strong></div></div>
+<section class="card"><div class="card-header bg-white"><h2 class="h6 mb-0">ที่อยู่และการเดินทาง</h2></div><div class="card-body"><dl class="row detail-list mb-3"><dt class="col-md-3">ที่อยู่</dt><dd class="col-md-9">{{ collect([$company->address, $company->subdistrict, $company->district, $company->province, $company->zipcode])->filter()->implode(', ') ?: 'ไม่ระบุที่อยู่' }}</dd><dt class="col-md-3">ละติจูด</dt><dd class="col-md-3">{{ $company->latitude ?: '—' }}</dd><dt class="col-md-3">ลองจิจูด</dt><dd class="col-md-3">{{ $company->longitude ?: '—' }}</dd></dl>@if($company->google_maps_url || ($company->latitude && $company->longitude))<a class="btn btn-sm btn-outline-primary" target="_blank" rel="noopener noreferrer" href="{{ $company->google_maps_url ?: 'https://www.google.com/maps/dir/?api=1&destination='.$company->latitude.','.$company->longitude }}"><i data-lucide="map-pin" class="me-1" style="width:15px;height:15px"></i>วางแผนการเดินทางใน Google Maps</a>@endif</div></section>
+@endsection
